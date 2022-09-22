@@ -13,7 +13,8 @@ def help(update, context):
     update.message.reply_text('Help!')
 def echo(update, context):
     """Echo the user message."""
-    update.message.reply_text(update.message.text)
+    if update.message.text = "Hi":
+     update.message.reply_text("Hallo Jnck")
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
