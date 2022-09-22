@@ -1,32 +1,13 @@
-import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-logger = logging.getLogger(__name__)
-# Define a few command handlers. These usually take the two arguments update and
-# context. Error handlers also receive the raised TelegramError object in error.
-def start(update, context):
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
-def help(update, context):
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
-def echo(update, context):
-    """Echo the user message."""
-    text=update.message.text.lower()
-    if text.startswith("hi"):
-     update.message.reply_text("Hallo Jnck")
-def error(update, context):
-    """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
-def main():
-    updater = Updater("1559560627:AAElkke4Go3cCuY06tPa8OpBR3fhD03hUqY", use_context=True)
-    dp = updater.dispatcher
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(MessageHandler(Filters.text, echo))
-    dp.add_error_handler(error)
-    updater.start_polling()
-    updater.idle()
-if __name__ == '__main__':
-    main()
+import telebot
+
+bot = telebot.TeleBot("1559560627:AAElkke4Go3cCuY06tPa8OpBR3fhD03hUqY")
+
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+	bot.reply_to(message, "Howdy, how are you doing?")
+
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+ if message.startswith("hi"):
+     bot.reply_to(message,"Hallo")
+bot.infinity_polling()
