@@ -8,7 +8,7 @@ def send_welcome(message):
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
- text = message.text
+ text = message.text.lower()
  if text.startswith("hi"):
      bot.reply_to(message,"Hallo")
 bot.infinity_polling()
