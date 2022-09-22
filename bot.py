@@ -7,6 +7,7 @@ def send_welcome(message):
 	bot.reply_to(message, "Howdy, how are you doing?")
 
 @bot.message_handler(func=lambda message: True)
+@bot.message_handler(content_types=["text"], chat_types=["private", "group"])
 def echo_all(message):
  text = message.text.lower()
  if text.startswith("hi"):
