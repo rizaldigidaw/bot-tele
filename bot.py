@@ -23,7 +23,7 @@ def help(update, context):
 def echo(update, context):
     text = update.message.text.lower()
     if text.startswith("hi"):
-     update.message.reply_text()
+     update.message.reply_text("Hallo JNCK")
 
 
 def error(update, context):
