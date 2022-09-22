@@ -21,7 +21,7 @@ def help(update, context):
 
 
 def echo(update, context):
-    text = update.text.lower()
+    text = update.message.text.lower()
     if text.startswith("hi"):
      update.message.reply_text()
 
