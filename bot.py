@@ -1,81 +1,54 @@
-import telegram
-from telegram.ext import Updater, MessageHandler, Filters
-from telegram.ext import CommandHandler
-from Flask import get_info
-
-telegram_bot_token = "1559560627:AAElkke4Go3cCuY06tPa8OpBR3fhD03hUqY"
-
-updater = Updater(token=telegram_bot_token, use_context=True)
-dispatcher = updater.dispatcher
+from Flask_Tele import get_info
 
 
-# set up the introductory statement for the bot when the /start command is invoked
+import logging
+
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+
+
+# Define a few command handlers. These usually take the two arguments update and
+# context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
-    chat_id = update.effective_chat.id
-    context.bot.send_message(chat_id=chat_id, text="Hello there. Provide any English word and I will give you a bunch "
-                                                   "of information about it.")
+    """Send a message when the command /start is issued."""
+    update.message.reply_text('Hi!')
 
 
-# obtain the information of the word provided and format before presenting.
-def get_word_info(update, context):
-    # get the word info
-    word_info = get_info(update.message.text)
+def help(update, context):
+    """Send a message when the command /help is issued."""
+    update.message.reply_text('Help!')
 
-    # If the user provides an invalid English word, return the custom response from get_info() and exit the function
-    if word_info.__class__ is str:
-        update.message.reply_text(word_info)
-        return
 
-    # get the word the user provided
-    word = word_info['word']
+def echo(update, context):
+    """Echo the user message."""
+    update.message.reply_text(update.message.text)
 
-    # get the origin of the word
-    origin = word_info['origin']
-    meanings = '\n'
 
-    synonyms = ''
-    definition = ''
-    example = ''
-    antonyms = ''
+def error(update, context):
+    """Log Errors caused by Updates."""
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-    # a word may have several meanings. We'll use this counter to track each of the meanings provided from the response
-    meaning_counter = 1
 
-    for word_meaning in word_info['meanings']:
-        meanings += 'Meaning ' + str(meaning_counter) + ':\n'
+def main():
+    updater = Updater("1559560627:AAElkke4Go3cCuY06tPa8OpBR3fhD03hUqY", use_context=True)
 
-        for word_definition in word_meaning['definitions']:
-            # extract the each of the definitions of the word
-            definition = word_definition['definition']
+    dp = updater.dispatcher
 
-            # extract each example for the respective definition
-            if 'example' in word_definition:
-                example = word_definition['example']
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
 
-            # extract the collection of synonyms for the word based on the definition
-            for word_synonym in word_definition['synonyms']:
-                synonyms += word_synonym + ', '
+    dp.add_handler(MessageHandler(Filters.text, echo))
 
-            # extract the antonyms of the word based on the definition
-            for word_antonym in word_definition['antonyms']:
-                antonyms += word_antonym + ', '
+    dp.add_error_handler(error)
 
-        meanings += 'Definition: ' + definition + '\n\n'
-        meanings += 'Example: ' + example + '\n\n'
-        meanings += 'Synonym: ' + synonyms + '\n\n'
-        meanings += 'Antonym: ' + antonyms + '\n\n\n'
+    updater.start_polling()
 
-        meaning_counter += 1
+    updater.idle()
 
-    # format the data into a string
-    message = f"Word: {word}\n\nOrigin: {origin}\n{meanings}"
 
-    update.message.reply_text(message)
-
-# run the start function when the user invokes the /start command 
-dispatcher.add_handler(CommandHandler("start", start))
-
-# invoke the get_word_info function when the user sends a message 
-# that is not a command.
-dispatcher.add_handler(MessageHandler(Filters.text, get_word_info))
-updater.start_polling()
+if __name__ == '__main__':
+    main()
