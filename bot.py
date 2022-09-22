@@ -15,7 +15,7 @@ def echo(update, context):
     """Echo the user message."""
     text=update.message.text.lower()
     if text.startswith("hi"):
-     update.message.reply("Hallo Jnck")
+     update.message.reply_text("Hallo Jnck")
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
