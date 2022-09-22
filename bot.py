@@ -1,9 +1,8 @@
-from Flask_Tele import get_info
-
 
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from Flask_Tele import get_info
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
