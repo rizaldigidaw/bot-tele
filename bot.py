@@ -1,5 +1,8 @@
 import telebot
 
+logger = telebot.logger
+telebot.logger.setLevel(logging.DEBUG)
+
 bot = telebot.TeleBot("1559560627:AAElkke4Go3cCuY06tPa8OpBR3fhD03hUqY")
 
 @bot.message_handler(commands=['start', 'help'])
