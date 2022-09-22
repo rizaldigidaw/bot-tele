@@ -1,13 +1,20 @@
-import telebot
-from telebot import types,util
-from telebot.async_telebot import AsyncTeleBot
+from telethon.sync import TelegramClient, events
 
-bot = AsyncTeleBot('5675916411:AAHUpune1WGyJqdCEePo_GVlgHe0NxygURA')
+with TelegramClient('name', "18061087", "0315a62d3b3b5d909dfdc30851dabb35") as client:
+   #client.send_message('me', 'Hello, myself!')
+  #print(client.download_profile_photo('me'))
 
-@bot.message_handler()
-async def msg(message):
-    text = message.text.lower()
-    await bot.reply_to(message,text)
-bot.add_custom_filter(telebot.asyncio_filters.TextStartsFilter())
-import asyncio
-asyncio.run(bot.polling(allowed_updates=util.update_types))
+   @client.on(events.NewMessage(pattern='(?i).*sfs'))
+   async def handler(event):
+      await event.reply('Bio Ka')
+   @client.on(events.NewMessage(pattern='(?i).*Hi'))
+   async def handler(event):
+      await event.reply('Allo ka!')
+   @client.on(events.NewMessage(pattern='(?i).*ig'))
+   async def handler(event):
+      await event.reply('yukk kak, rizaldigidaw')
+   @client.on(events.NewMessage(pattern='(?i).*Spontan'))
+   async def handler(event):
+      await event.reply('Uhuyyyy!')
+
+   client.run_until_disconnected()
